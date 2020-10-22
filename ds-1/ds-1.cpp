@@ -12,15 +12,17 @@ int main()
     int row = 0;
     int col = 0;
     
+    string filename;
+
+    cout << "Please enter File Name: ";
+    cin >> filename;
 
     string line;
-    vector <string> tokens;
+    vector <string> tokens; 
 
-    
-
-    
+    vector<vector<string>> vect;
    
-    ifstream myfile("blobs1.txt");
+    ifstream myfile(filename);
     bool firstlineflag = 0;
     if (myfile.is_open())
     {
@@ -30,7 +32,7 @@ int main()
             if (firstlineflag==0) {
 
                 stringstream check1(line);
-
+                
                 string intermediate;
 
                 while (getline(check1, intermediate, ' '))
@@ -38,18 +40,22 @@ int main()
                     tokens.push_back(intermediate);  
                 }
                 row = stoi(tokens[0]);
-                col = stoi(tokens[1]);
+                col = stoi(tokens[1]);  
+
+                //declare dynamic array
+                char** a = new char* [row];
+                for (char i = 0; i < row; ++i)
+                    a[i] = new char[col];
+
             }
-            cout << line << '\n';
-            firstlineflag = 1;
+            //write file to screen
+            cout << line << '\n';   
         }
+        
         myfile.close();
     }
 
     else cout << "Unable to open file";
-
-    
-    
 
     return 0;
 }
