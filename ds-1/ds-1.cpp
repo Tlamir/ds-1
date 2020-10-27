@@ -1,15 +1,68 @@
-
-
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
 #include <sstream>
 using namespace std;
+int NumberOfPixel = 0;
+int BlobPixel = 0;
 
-int blobs = 0;
+
+void blobsCalculate(char** Blobs,int** VisitedPixels, int i, int j,int row,int col) {
 
 
+    /*if ( j<col-1)
+    {
+        if (Blobs[i][j] == *"x")
+        {
+            NumberOfPixel++;
+           
+        }
+
+        j++;
+        blobsCalculate(Blobs, i, j,row,col);
+        
+       
+    }
+    else if(i<row-1)
+    {
+        if (Blobs[i][j] == *"x")
+        {
+            NumberOfPixel++;
+        }
+        i++;
+        blobsCalculate(Blobs, i,0, row, col);
+        
+    }
+    else{
+    
+        return;
+
+
+    }*/
+  
+    if (i<0||i>=row||j<0||j>=col)
+    {
+        return;
+        
+    }
+   
+    if (VisitedPixels[i][j]==0)
+    {
+
+        VisitedPixels[i][j] = 1;
+        if (Blobs[i][j] == *"x" || Blobs[i][j] == *"X")
+        {
+            NumberOfPixel++;
+        }
+        blobsCalculate(Blobs, VisitedPixels, i + 1, j, row, col);
+        blobsCalculate(Blobs, VisitedPixels, i, j + 1, row, col);
+        blobsCalculate(Blobs, VisitedPixels, i - 1, j, row, col);
+        blobsCalculate(Blobs, VisitedPixels, i, j - 1, row, col);
+        
+    }
+       
+}
 int main()
 {
     int row = 0;
@@ -62,6 +115,13 @@ int main()
         char** a = new char* [row];
         for (char i = 0; i < row; ++i)
             a[i] = new char[col];
+        //declare dynamic array for vizited pixels
+        int** VisitedPixels = new int* [row];
+        for (int i = 0; i < row; ++i)
+            VisitedPixels[i] = new int[col];
+
+       
+       
 
         //get file to array
         int k = 0;
@@ -71,6 +131,9 @@ int main()
             {
                 a[i][j] = (char)lines[k];
                 k++;
+
+                //fill visited pixels
+                VisitedPixels[i][j] = 0;
             }
         }
 
@@ -122,6 +185,9 @@ int main()
         }
         row = row - 4;
         col = col - 4;
+
+        blobsCalculate(a, VisitedPixels,0,0,row,col);
+        cout << "===========" << NumberOfPixel<<"===========";
 
     }
     else cout << "Unable to open file";
